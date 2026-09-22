@@ -1,0 +1,2069 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Colorarium — Guia Visual de Cores</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+:root{
+    --paper:#f5f0e8;
+    --paper2:#ebe3d6;
+    --ink:#292621;
+    --muted:#756f67;
+    --line:rgba(50,40,30,.14);
+    --white:#fffdf8;
+    --shadow:0 15px 45px rgba(50,40,30,.10);
+}
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+
+body{
+    min-height:100vh;
+    background:
+        radial-gradient(circle at 15% 15%,rgba(255,255,255,.8),transparent 25%),
+        radial-gradient(circle at 85% 80%,rgba(216,202,180,.25),transparent 30%),
+        var(--paper);
+    color:var(--ink);
+    font-family:"DM Sans",sans-serif;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    opacity:.22;
+    background-image:radial-gradient(rgba(50,40,30,.12) .5px,transparent .5px);
+    background-size:6px 6px;
+    z-index:10;
+}
+
+header{
+    padding:55px 7% 35px;
+    text-align:center;
+    position:relative;
+}
+
+.small-title{
+    font-size:11px;
+    letter-spacing:4px;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:12px;
+}
+
+h1{
+    font-family:"Cormorant Garamond",serif;
+    font-size:clamp(52px,8vw,105px);
+    line-height:.85;
+    font-weight:500;
+    letter-spacing:-3px;
+}
+
+.subtitle{
+    max-width:650px;
+    margin:22px auto 0;
+    color:var(--muted);
+    line-height:1.7;
+    font-size:14px;
+}
+
+.search-area{
+    max-width:760px;
+    margin:25px auto 0;
+    position:relative;
+}
+
+.search{
+    width:100%;
+    border:1px solid var(--line);
+    background:rgba(255,253,248,.8);
+    padding:17px 50px 17px 20px;
+    border-radius:50px;
+    outline:none;
+    font-family:inherit;
+    font-size:14px;
+    box-shadow:var(--shadow);
+    transition:.25s;
+}
+
+.search:focus{
+    border-color:#8b8175;
+    transform:translateY(-2px);
+}
+
+.search-icon{
+    position:absolute;
+    right:20px;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:18px;
+}
+
+.categories{
+    max-width:1500px;
+    margin:20px auto 0;
+    padding:0 20px;
+    display:flex;
+    gap:8px;
+    justify-content:center;
+    flex-wrap:wrap;
+}
+
+.category{
+    border:1px solid var(--line);
+    background:rgba(255,255,255,.4);
+    padding:8px 13px;
+    border-radius:30px;
+    cursor:pointer;
+    font-size:11px;
+    transition:.2s;
+}
+
+.category:hover,
+.category.active{
+    background:var(--ink);
+    color:white;
+}
+
+main{
+    width:min(1250px,92%);
+    margin:20px auto 100px;
+}
+
+.section-heading{
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
+    margin:55px 0 20px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:12px;
+}
+
+.section-heading h2{
+    font-family:"Cormorant Garamond",serif;
+    font-size:38px;
+    font-weight:500;
+}
+
+.section-heading span{
+    color:var(--muted);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:2px;
+}
+
+.families{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:22px;
+}
+
+.family-card{
+    background:rgba(255,253,248,.75);
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:18px;
+    cursor:pointer;
+    transition:.3s;
+    box-shadow:0 7px 25px rgba(50,40,30,.05);
+}
+
+.family-card:hover{
+    transform:translateY(-5px) rotate(.15deg);
+    box-shadow:var(--shadow);
+}
+
+.family-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:14px;
+}
+
+.family-name{
+    font-family:"Cormorant Garamond",serif;
+    font-size:29px;
+}
+
+.family-count{
+    font-size:10px;
+    color:var(--muted);
+}
+
+.swatches{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    height:110px;
+    border-radius:15px;
+    overflow:hidden;
+}
+
+.swatch{
+    position:relative;
+    transition:.25s;
+    cursor:pointer;
+}
+
+.swatch:hover{
+    transform:scaleY(1.08);
+    z-index:2;
+}
+
+.family-description{
+    font-size:12px;
+    color:var(--muted);
+    line-height:1.6;
+    margin-top:14px;
+}
+
+.detail{
+    display:none;
+    margin-top:35px;
+    animation:appear .45s ease;
+}
+
+.detail.show{ display:block; }
+
+@keyframes appear{
+    from{ opacity:0; transform:translateY(15px); }
+    to{ opacity:1; transform:translateY(0); }
+}
+
+.detail-card{
+    background:rgba(255,253,248,.9);
+    border:1px solid var(--line);
+    border-radius:30px;
+    padding:30px;
+    box-shadow:var(--shadow);
+}
+
+.close{
+    float:right;
+    border:1px solid var(--line);
+    background:none;
+    width:35px;
+    height:35px;
+    border-radius:50%;
+    cursor:pointer;
+    font-size:18px;
+}
+
+.detail-main{
+    display:grid;
+    grid-template-columns:260px 1fr;
+    gap:35px;
+}
+
+.big-color{
+    min-height:260px;
+    border-radius:25px;
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,.08);
+    position:relative;
+}
+
+.color-paper{
+    position:absolute;
+    bottom:15px;
+    left:15px;
+    right:15px;
+    background:rgba(255,255,255,.8);
+    backdrop-filter:blur(10px);
+    padding:13px;
+    border-radius:14px;
+}
+
+.color-paper strong{
+    display:block;
+    font-family:"Cormorant Garamond",serif;
+    font-size:25px;
+}
+
+.detail-info h2{
+    font-family:"Cormorant Garamond",serif;
+    font-size:50px;
+    font-weight:500;
+}
+
+.family-label{
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:2px;
+    font-size:10px;
+}
+
+.description{
+    color:var(--muted);
+    line-height:1.8;
+    margin:15px 0;
+    max-width:650px;
+}
+
+.codes{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.code{
+    padding:9px 12px;
+    background:var(--paper2);
+    border-radius:8px;
+    font-family:monospace;
+    font-size:12px;
+}
+
+.info-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+    margin-top:25px;
+}
+
+.info-box{
+    border:1px solid var(--line);
+    padding:18px;
+    border-radius:18px;
+    background:rgba(255,255,255,.35);
+}
+
+.info-box h3{
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:2px;
+    margin-bottom:9px;
+}
+
+.info-box p{
+    font-size:13px;
+    line-height:1.6;
+    color:var(--muted);
+}
+
+.tones-title{
+    margin-top:35px;
+    font-family:"Cormorant Garamond",serif;
+    font-size:34px;
+}
+
+.tone-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(125px,1fr));
+    gap:12px;
+    margin-top:15px;
+}
+
+.tone{
+    border:1px solid var(--line);
+    border-radius:15px;
+    overflow:hidden;
+    background:var(--white);
+    cursor:pointer;
+    transition:.2s;
+}
+
+.tone:hover{ transform:translateY(-3px); }
+
+.tone-color{ height:90px; }
+
+.tone-info{ padding:10px; }
+
+.tone-info strong{
+    display:block;
+    font-size:12px;
+    margin-bottom:4px;
+}
+
+.tone-info small{
+    color:var(--muted);
+    font-family:monospace;
+}
+
+.palette{
+    display:flex;
+    height:90px;
+    border-radius:18px;
+    overflow:hidden;
+    margin-top:15px;
+}
+
+.palette div{
+    flex:1;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.palette div:hover{ flex:1.4; }
+
+.search-results{
+    display:none;
+    margin-top:25px;
+}
+
+.search-results.show{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+    gap:14px;
+}
+
+.result{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:17px;
+    overflow:hidden;
+    cursor:pointer;
+}
+
+.result-color{ height:100px; }
+
+.result-info{ padding:12px; }
+
+.result-info strong{
+    font-size:13px;
+    display:block;
+}
+
+.result-info small{ color:var(--muted); }
+
+footer{
+    border-top:1px solid var(--line);
+    text-align:center;
+    padding:35px 20px;
+    color:var(--muted);
+    font-size:11px;
+    letter-spacing:1px;
+}
+
+@media(max-width:750px){
+    header{ padding-top:35px; }
+    h1{ font-size:62px; }
+    .detail-main{ grid-template-columns:1fr; }
+    .big-color{ min-height:210px; }
+    .info-grid{ grid-template-columns:1fr; }
+    .section-heading{
+        align-items:start;
+        gap:10px;
+        flex-direction:column;
+    }
+    .swatches{ height:80px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="small-title">Atlas visual · 500+ cores catalogadas</div>
+    <h1>Colorarium</h1>
+    <p class="subtitle">
+        Um catálogo visual para descobrir cores, tons, subtons, significados,
+        combinações e possibilidades de uso.
+    </p>
+
+    <div class="search-area">
+        <input id="search" class="search" type="text"
+               placeholder="Pesquisar por cor, nome ou código HEX...">
+        <span class="search-icon">⌕</span>
+    </div>
+
+    <div id="categories" class="categories"></div>
+</header>
+
+<main>
+    <section id="catalogSection">
+        <div class="section-heading">
+            <h2>Famílias cromáticas</h2>
+            <span>explore por tonalidade</span>
+        </div>
+        <div id="families" class="families"></div>
+    </section>
+
+    <section id="results" class="search-results"></section>
+    <section id="detail" class="detail"></section>
+</main>
+
+<footer>COLORARIUM · GUIA VISUAL DE CORES</footer>
+
+<script>
+
+/* ==========================================================
+   BANCO DE CORES — 500+ CORES EM 36 FAMÍLIAS
+========================================================== */
+
+const palettes = {
+
+/* ==================== VERMELHOS ==================== */
+"Vermelhos":{
+    description:"Cores intensas associadas a energia, paixão, força e presença.",
+    meaning:"Energia, paixão, urgência, força e intensidade.",
+    use:"Marcas, publicidade, eventos, moda, gastronomia e destaques.",
+    combinations:["Creme","Preto","Branco","Rosa","Laranja"],
+    colors:[
+        ["Vermelho sangue","#4A0000"],
+        ["Vermelho escuro","#8B0000"],
+        ["Vermelho tijolo","#B22222"],
+        ["Vermelho fogo","#C1272D"],
+        ["Vermelho tomate","#E63946"],
+        ["Vermelho vivo","#EF233C"],
+        ["Vermelho clássico","#D90429"],
+        ["Vermelho rubi","#9B111E"],
+        ["Vermelho cereja","#D2042D"],
+        ["Vermelho coral","#FF4040"],
+        ["Vermelho claro","#FF8A80"],
+        ["Vermelho pastel","#FFB3B3"],
+        ["Vermelho pálido","#FFD6D6"],
+        ["Vermelho rosado","#FFC1CC"],
+        ["Vermelho terra","#A52A2A"],
+        ["Vermelho indiano","#CD5C5C"],
+        ["Vermelho escarlate","#FF2400"],
+        ["Vermelho carmim","#960018"]
+    ]
+},
+
+/* ==================== VINHO E BORDÔ ==================== */
+"Vinho e Bordô":{
+    description:"Vermelhos escuros e profundos, com forte carga simbólica e elegância.",
+    meaning:"Sofisticação, tradição, poder, romance e intensidade contida.",
+    use:"Vinhos, joalherias, moda de luxo, editorial, gastronomia e decoração clássica.",
+    combinations:["Dourado","Creme","Verde escuro","Preto","Rosa antigo"],
+    colors:[
+        ["Vinho negro","#2B0509"],
+        ["Vinho profundo","#3B0918"],
+        ["Bordô escuro","#4A0E1F"],
+        ["Bordô","#5C0A1E"],
+        ["Vinho","#6E1423"],
+        ["Marsala","#7B2D3B"],
+        ["Vinho claro","#8E3A4C"],
+        ["Rosa antigo","#A25B6B"],
+        ["Vinho rosado","#B76E79"],
+        ["Borgonha","#800020"],
+        ["Vinho seco","#58111A"]
+    ]
+},
+
+/* ==================== CARMIM E MAGENTA ==================== */
+"Carmim e Magenta":{
+    description:"Vermelhos-rosados vibrantes, com forte apelo visual e modernidade.",
+    meaning:"Ousadia, juventude, criatividade e expressão.",
+    use:"Moda, cosméticos, publicidade, embalagens e design digital.",
+    combinations:["Preto","Rosa","Roxo","Branco","Ciano"],
+    colors:[
+        ["Carmim escuro","#8B0045"],
+        ["Carmesim","#A4001A"],
+        ["Carmim","#C40233"],
+        ["Fúcsia escura","#B5125C"],
+        ["Fúcsia","#D6336C"],
+        ["Magenta","#DB2777"],
+        ["Magenta vivo","#E91E63"],
+        ["Pink","#FF1493"],
+        ["Rosa choque","#FF69B4"],
+        ["Magenta claro","#FF8FC7"],
+        ["Magenta pastel","#FFC2E1"],
+        ["Rosa elétrico","#FF3FA4"]
+    ]
+},
+
+/* ==================== LARANJAS ==================== */
+"Laranjas":{
+    description:"Tons quentes e espontâneos que trazem energia e proximidade.",
+    meaning:"Criatividade, entusiasmo, movimento e sociabilidade.",
+    use:"Tecnologia, alimentação, interfaces, campanhas e projetos criativos.",
+    combinations:["Azul","Creme","Marrom","Amarelo","Verde"],
+    colors:[
+        ["Telha","#8C3B1F"],
+        ["Terracota","#C65D3B"],
+        ["Queimado","#B84A2F"],
+        ["Laranja escuro","#D35400"],
+        ["Laranja","#F97316"],
+        ["Tangerina","#FF8C00"],
+        ["Laranja vivo","#FF7A00"],
+        ["Laranja claro","#FFA94D"],
+        ["Pêssego","#FFB07C"],
+        ["Salmão","#FA8072"],
+        ["Coral","#FF7F50"],
+        ["Damasco","#FFD9B3"],
+        ["Laranja pastel","#FFE0C2"],
+        ["Casca de ovo","#FFEBD6"],
+        ["Abóbora","#E67E22"],
+        ["Cenoura","#ED9121"],
+        ["Laranja queimado","#CC5500"]
+    ]
+},
+
+/* ==================== AMARELOS ==================== */
+"Amarelos":{
+    description:"Uma família luminosa que chama atenção e cria sensação de leveza.",
+    meaning:"Otimismo, alegria, criatividade e luminosidade.",
+    use:"Educação, publicidade, interfaces, ilustração, identidade visual e sinalização.",
+    combinations:["Roxo","Azul","Cinza","Preto","Verde"],
+    colors:[
+        ["Mostarda escura","#8B6914"],
+        ["Mostarda","#B8860B"],
+        ["Ocre","#CC9900"],
+        ["Amarelo escuro","#D4A017"],
+        ["Mel","#E0A800"],
+        ["Amarelo","#FFD000"],
+        ["Amarelo vivo","#FFEA00"],
+        ["Limão","#DFFF00"],
+        ["Amarelo claro","#FFF176"],
+        ["Baunilha","#FFF3B0"],
+        ["Creme de milho","#FFF8DC"],
+        ["Ovo","#FFF9C4"],
+        ["Marfim amarelo","#FFFDE7"],
+        ["Amarelo palha","#F5E6A3"],
+        ["Amarelo manteiga","#FCEFA1"],
+        ["Amarelo canário","#FFEF00"],
+        ["Amarelo gema","#FFCC33"]
+    ]
+},
+
+/* ==================== DOURADOS ==================== */
+"Dourados":{
+    description:"Tons metálicos e quentes que remetem a luxo, tradição e prestígio.",
+    meaning:"Luxo, tradição, prestígio, riqueza e solenidade.",
+    use:"Marcas premium, joalherias, hotelaria, embalagens de luxo e cerimônias.",
+    combinations:["Preto","Vinho","Verde esmeralda","Azul marinho","Marfim"],
+    colors:[
+        ["Bronze escuro","#6E4B23"],
+        ["Bronze","#A97142"],
+        ["Cobre","#B87333"],
+        ["Cobre claro","#CD7F32"],
+        ["Ouro velho","#BFA037"],
+        ["Ouro","#D4AF37"],
+        ["Ouro claro","#E6C200"],
+        ["Ouro pálido","#EEDD82"],
+        ["Champagne","#F7E7CE"],
+        ["Palha","#F0E2A8"],
+        ["Ouro rosa","#B76E79"],
+        ["Metal dourado","#DAA520"],
+        ["Ouro fosco","#C9A227"]
+    ]
+},
+
+/* ==================== VERDES ==================== */
+"Verdes":{
+    description:"Tons relacionados à natureza, equilíbrio e sensação de frescor.",
+    meaning:"Natureza, equilíbrio, renovação, crescimento e tranquilidade.",
+    use:"Saúde, sustentabilidade, natureza, tecnologia, alimentação e educação.",
+    combinations:["Rosa","Vermelho","Creme","Azul","Marrom"],
+    colors:[
+        ["Verde floresta","#14532D"],
+        ["Verde pinheiro","#1B4332"],
+        ["Verde escuro","#1E5631"],
+        ["Verde musgo","#556B2F"],
+        ["Verde oliva","#808000"],
+        ["Verde esmeralda","#059669"],
+        ["Verde jade","#00A86B"],
+        ["Verde folha","#22C55E"],
+        ["Verde grama","#4CAF50"],
+        ["Verde maçã","#8BC34A"],
+        ["Verde lima","#AEEA00"],
+        ["Verde menta","#6EE7B7"],
+        ["Verde água","#B2DFDB"],
+        ["Verde pastel","#B7E4C7"],
+        ["Verde névoa","#E0F2E9"],
+        ["Verde abacate","#568203"],
+        ["Verde trévo","#3B7A57"],
+        ["Verde esmeralda claro","#7FFFD4"]
+    ]
+},
+
+/* ==================== MUSGO E FLORESTA ==================== */
+"Musgo e Floresta":{
+    description:"Verdes profundos e terrosos, inspirados em florestas densas e vegetação úmida.",
+    meaning:"Natureza selvagem, mistério, estabilidade e reconexão.",
+    use:"Cosméticos naturais, marcas outdoor, arquitetura paisagística e sustentabilidade.",
+    combinations:["Bege","Marrom","Dourado","Cinza","Preto"],
+    colors:[
+        ["Verde cipreste","#2F4F3E"],
+        ["Verde jade escuro","#2E5A4C"],
+        ["Verde sapo","#4A6B3A"],
+        ["Verde samambaia","#5C7A4E"],
+        ["Verde eucalipto","#7C9A7A"],
+        ["Verde sálvia","#9CAF88"],
+        ["Verde chá","#C9D6B8"],
+        ["Verde bambu","#7BA05B"],
+        ["Verde trevo escuro","#1F5C3D"],
+        ["Verde pinho","#2C5F2D"]
+    ]
+},
+
+/* ==================== AZUIS ==================== */
+"Azuis":{
+    description:"Tons que geralmente transmitem estabilidade, profundidade e calma.",
+    meaning:"Confiança, tranquilidade, tecnologia, segurança e profundidade.",
+    use:"Tecnologia, bancos, educação, saúde, interfaces e empresas.",
+    combinations:["Laranja","Amarelo","Branco","Cinza","Roxo"],
+    colors:[
+        ["Azul meia-noite","#0B1F3A"],
+        ["Azul marinho","#102A43"],
+        ["Azul petróleo","#164E63"],
+        ["Azul cobalto","#1E40AF"],
+        ["Azul profundo","#1D4ED8"],
+        ["Azul clássico","#2563EB"],
+        ["Azul royal","#1E90FF"],
+        ["Azul aço","#4682B4"],
+        ["Azul celeste","#38BDF8"],
+        ["Azul céu","#60A5FA"],
+        ["Azul bebê","#93C5FD"],
+        ["Azul pastel","#BBDEFB"],
+        ["Azul névoa","#DBEAFE"],
+        ["Azul gelo","#EFF6FF"],
+        ["Azul jeans","#1560BD"],
+        ["Azul elétrico","#2C75FF"],
+        ["Azul safira","#0F52BA"],
+        ["Azul ciano","#00BFFF"]
+    ]
+},
+
+/* ==================== CIANOS ==================== */
+"Cianos":{
+    description:"Entre o azul e o verde, criando uma sensação fresca e contemporânea.",
+    meaning:"Frescor, clareza, tecnologia, água e modernidade.",
+    use:"Tecnologia, ciência, interfaces, produtos digitais e projetos futuristas.",
+    combinations:["Coral","Laranja","Azul","Branco","Roxo"],
+    colors:[
+        ["Ciano profundo","#0E7490"],
+        ["Azul piscina","#0891B2"],
+        ["Turquesa escuro","#0F766E"],
+        ["Turquesa","#14B8A6"],
+        ["Ciano","#06B6D4"],
+        ["Água","#22D3EE"],
+        ["Turquesa claro","#67E8F9"],
+        ["Aqua claro","#A5F3FC"],
+        ["Gelo","#CFFAFE"],
+        ["Menta água","#E0FBF9"],
+        ["Ciano claro","#B2EBF2"],
+        ["Azul caribe","#00B4D8"],
+        ["Ciano neon","#00E5FF"],
+        ["Turquesa profundo","#00707A"]
+    ]
+},
+
+/* ==================== ROXOS ==================== */
+"Roxos":{
+    description:"Uma família expressiva que mistura profundidade e criatividade.",
+    meaning:"Imaginação, mistério, criatividade, espiritualidade e luxo.",
+    use:"Arte, beleza, tecnologia, criatividade, entretenimento e marcas premium.",
+    combinations:["Amarelo","Rosa","Azul","Branco","Verde"],
+    colors:[
+        ["Ameixa","#4C1D3D"],
+        ["Berinjela","#3B0764"],
+        ["Roxo imperial","#4B0082"],
+        ["Roxo profundo","#581C87"],
+        ["Roxo","#7E22CE"],
+        ["Púrpura","#8B008B"],
+        ["Violeta","#8B5CF6"],
+        ["Uva","#6F2DA8"],
+        ["Lavanda escuro","#7C6BC4"],
+        ["Lavanda","#A78BFA"],
+        ["Lilás","#DDD6FE"],
+        ["Lavanda claro","#EDE9FE"],
+        ["Uva clara","#F3E8FF"],
+        ["Malva","#E0B0FF"],
+        ["Orquídea","#DA70D6"],
+        ["Ametista","#9966CC"],
+        ["Roxo profundo escuro","#2E1A47"]
+    ]
+},
+
+/* ==================== ROSAS ==================== */
+"Rosas":{
+    description:"Tons que podem variar do delicado ao vibrante e expressivo.",
+    meaning:"Afeto, delicadeza, criatividade, cuidado e expressão.",
+    use:"Moda, beleza, ilustração, interfaces, projetos femininos e arte.",
+    combinations:["Verde","Roxo","Vermelho","Cinza","Creme"],
+    colors:[
+        ["Rosa escuro","#9D174D"],
+        ["Framboesa","#B3124A"],
+        ["Pink profundo","#BE185D"],
+        ["Rosa","#EC4899"],
+        ["Rosa chiclete","#F472B6"],
+        ["Rosa claro","#F9A8D4"],
+        ["Rosa bebê","#FBCFE8"],
+        ["Rosa pastel","#FCE7F3"],
+        ["Rosa quartzo","#F8E1E7"],
+        ["Rosa nu","#F5E0DC"],
+        ["Rosa antigo","#C08081"],
+        ["Rosa seco","#D8A7A7"],
+        ["Rosa chá","#F5C6C6"],
+        ["Rosa porcelana","#FBE4E4"],
+        ["Rosa coral","#F88379"],
+        ["Rosa pó","#EFD9DD"],
+        ["Rosa suave","#FFE4E1"]
+    ]
+},
+
+/* ==================== MARRONS ==================== */
+"Marrons":{
+    description:"Tons terrosos que criam sensação de aconchego e materialidade.",
+    meaning:"Terra, estabilidade, aconchego, tradição e naturalidade.",
+    use:"Café, gastronomia, arquitetura, moda, decoração e marcas artesanais.",
+    combinations:["Creme","Verde","Azul","Laranja","Bege"],
+    colors:[
+        ["Marrom café","#2B1B12"],
+        ["Marrom profundo","#3B2416"],
+        ["Café","#4B2E20"],
+        ["Chocolate","#5C3317"],
+        ["Marrom tabaco","#6F4E37"],
+        ["Marrom canela","#8B5A2B"],
+        ["Caramelo","#C47A44"],
+        ["Canela","#D2691E"],
+        ["Areia","#D6B88A"],
+        ["Bege quente","#E8D5B5"],
+        ["Areia clara","#F0E1C8"],
+        ["Marrom pastel","#F5E6D3"],
+        ["Marrom cacau","#8B4513"],
+        ["Marrom castanha","#954535"],
+        ["Marrom noz","#7B3F00"],
+        ["Marrom chocolate amargo","#3D1F0F"]
+    ]
+},
+
+/* ==================== TERROSOS ==================== */
+"Terrosos":{
+    description:"Uma família quente e orgânica inspirada em argila, barro e pigmentos naturais.",
+    meaning:"Raízes, rusticidade, autenticidade e conexão com a terra.",
+    use:"Cerâmica, arquitetura, marcas artesanais, decoração e produtos naturais.",
+    combinations:["Bege","Verde oliva","Azul petróleo","Preto","Creme"],
+    colors:[
+        ["Barro cozido","#7C3B1E"],
+        ["Terracota escura","#A0522D"],
+        ["Argila","#B66A4A"],
+        ["Telha velha","#C97B5A"],
+        ["Adobe","#D89070"],
+        ["Areia molhada","#C9A88C"],
+        ["Palha seca","#E3C9A5"],
+        ["Siena","#A0522D"],
+        ["Siena queimada","#8A3324"],
+        ["Umber","#635147"],
+        ["Ocre terroso","#CC7722"],
+        ["Marrom argila","#9C6B4E"]
+    ]
+},
+
+/* ==================== NEUTROS ==================== */
+"Neutros":{
+    description:"Cores discretas que funcionam como base para praticamente qualquer composição.",
+    meaning:"Equilíbrio, simplicidade, elegância e neutralidade.",
+    use:"Fundos, interfaces, editoriais, arquitetura, apresentações e identidade visual.",
+    combinations:["Praticamente todas as famílias"],
+    colors:[
+        ["Preto","#000000"],
+        ["Preto suave","#111111"],
+        ["Carvão","#1E1E1E"],
+        ["Grafite","#292929"],
+        ["Chumbo","#3A3A3A"],
+        ["Cinza escuro","#4B5563"],
+        ["Cinza médio","#6B7280"],
+        ["Cinza","#9CA3AF"],
+        ["Cinza claro","#D1D5DB"],
+        ["Cinza névoa","#E5E7EB"],
+        ["Off-white","#F5F1E8"],
+        ["Branco sujo","#FAF7F2"],
+        ["Branco","#FFFFFF"],
+        ["Branco puro","#FEFEFE"],
+        ["Cinza pedra","#808080"],
+        ["Cinza palha","#C8C3BC"]
+    ]
+},
+
+/* ==================== CINZAS AZULADOS ==================== */
+"Cinzas Azulados":{
+    description:"Neutros frios que trazem sofisticação e serenidade às composições.",
+    meaning:"Calma, sofisticação, modernidade e neutralidade fria.",
+    use:"Interfaces minimalistas, arquitetura contemporânea, moda e editoriais.",
+    combinations:["Branco","Azul marinho","Rosa pastel","Preto","Bege"],
+    colors:[
+        ["Ardósia escura","#1E293B"],
+        ["Ardósia média","#334155"],
+        ["Ardósia","#475569"],
+        ["Cinza azulado","#64748B"],
+        ["Cinza aço","#94A3B8"],
+        ["Cinza prata","#CBD5E1"],
+        ["Cinza gelo","#E2E8F0"],
+        ["Névoa azulada","#F1F5F9"],
+        ["Cinza tempestade","#708090"],
+        ["Cinza chumbo","#36454F"],
+        ["Cinza aço escuro","#2F4F4F"]
+    ]
+},
+
+/* ==================== BEGES ==================== */
+"Beges":{
+    description:"Neutros quentes inspirados em papel, areia, madeira e materiais naturais.",
+    meaning:"Conforto, simplicidade, acolhimento e naturalidade.",
+    use:"Editorial, decoração, moda, sites minimalistas e projetos artesanais.",
+    combinations:["Marrom","Verde","Azul","Terracota","Rosa"],
+    colors:[
+        ["Café com leite","#8B7355"],
+        ["Taupe","#A89F91"],
+        ["Areia escura","#BFA98A"],
+        ["Caramelo claro","#C9A66B"],
+        ["Areia","#DCC9A1"],
+        ["Bege","#E5D3B3"],
+        ["Creme","#F3E8CF"],
+        ["Baunilha clara","#F7EFD9"],
+        ["Marfim","#FFF8E7"],
+        ["Linho","#F5EFE0"],
+        ["Papel antigo","#EFE6D0"],
+        ["Bege névoa","#F8F3E7"],
+        ["Bege rosado","#E8D5C4"],
+        ["Bege esverdeado","#D5D0B5"],
+        ["Bege claro","#F0E6D2"]
+    ]
+},
+
+/* ==================== PASTÉIS ==================== */
+"Pastéis":{
+    description:"Tons suaves e delicados, com saturação reduzida e alta luminosidade.",
+    meaning:"Delicadeza, suavidade, romantismo e leveza.",
+    use:"Infantil, cosméticos, papelaria, interfaces amigáveis e projetos delicados.",
+    combinations:["Branco","Cinza claro","Dourado suave","Lavanda","Menta"],
+    colors:[
+        ["Rosa pastel","#FADADD"],
+        ["Pêssego pastel","#FBD7C0"],
+        ["Amarelo pastel","#FDF3B5"],
+        ["Verde pastel","#C8E6C9"],
+        ["Menta pastel","#B2DFDB"],
+        ["Azul pastel","#BBDEFB"],
+        ["Lavanda pastel","#D1C4E9"],
+        ["Lilás pastel","#E1BEE7"],
+        ["Coral pastel","#FFD1C1"],
+        ["Areia pastel","#F0E4D0"],
+        ["Verde água pastel","#D4F1E8"],
+        ["Azul céu pastel","#D6EBFF"],
+        ["Rosa pó","#EFD9DD"],
+        ["Lima pastel","#E8F5C8"],
+        ["Lavanda claro","#EBE4F5"]
+    ]
+},
+
+/* ==================== NEON ==================== */
+"Neon":{
+    description:"Cores vibrantes e saturadas, associadas a energia, juventude e cultura digital.",
+    meaning:"Energia, ousadia, modernidade, juventude e expressão.",
+    use:"Games, música eletrônica, moda urbana, eventos noturnos e design digital.",
+    combinations:["Preto","Branco","Roxo","Ciano","Magenta"],
+    colors:[
+        ["Verde neon","#39FF14"],
+        ["Verde ácido","#CCFF00"],
+        ["Amarelo neon","#FFFF33"],
+        ["Laranja neon","#FF6700"],
+        ["Rosa neon","#FF10F0"],
+        ["Magenta neon","#FF00FF"],
+        ["Roxo neon","#BC13FE"],
+        ["Azul neon","#1F51FF"],
+        ["Ciano neon","#00FFFF"],
+        ["Turquesa neon","#00FFD5"],
+        ["Vermelho neon","#FF073A"],
+        ["Lima neon","#BFFF00"],
+        ["Pink neon","#FF6EC7"],
+        ["Azul elétrico","#0FF0FC"]
+    ]
+},
+
+/* ==================== METÁLICOS ==================== */
+"Metálicos":{
+    description:"Cores que imitam superfícies metálicas, com brilho e reflexo característicos.",
+    meaning:"Modernidade, tecnologia, força e sofisticação industrial.",
+    use:"Design automotivo, tecnologia, joalheria, arquitetura e branding premium.",
+    combinations:["Preto","Branco","Azul","Cinza","Vermelho"],
+    colors:[
+        ["Prata escuro","#708090"],
+        ["Prata","#C0C0C0"],
+        ["Prata claro","#D3D3D3"],
+        ["Platina","#E5E4E2"],
+        ["Titânio","#878681"],
+        ["Aço inox","#B0B7BC"],
+        ["Alumínio","#D9D9D9"],
+        ["Cromo","#DBE4EB"],
+        ["Grafite metálico","#383838"],
+        ["Bronze metálico","#CD7F32"],
+        ["Cobre metálico","#B87333"],
+        ["Ouro metálico","#D4AF37"]
+    ]
+},
+
+/* ==================== NATUREZA ==================== */
+"Natureza":{
+    description:"Cores inspiradas em elementos naturais: pedra, madeira, folha, céu, terra.",
+    meaning:"Conexão com o natural, calma, equilíbrio e autenticidade.",
+    use:"Marcas sustentáveis, cosméticos naturais, arquitetura, bem-estar e alimentação saudável.",
+    combinations:["Bege","Marrom","Verde","Azul","Terracota"],
+    colors:[
+        ["Pedra","#B2BEB5"],
+        ["Pedra molhada","#7A7A7A"],
+        ["Musgo seco","#8A9A5B"],
+        ["Folha seca","#C19A6B"],
+        ["Tronco","#6B4423"],
+        ["Madeira clara","#C19A6B"],
+        ["Madeira escura","#5C4033"],
+        ["Céu ao amanhecer","#FFB6A3"],
+        ["Céu ao entardecer","#FF8C69"],
+        ["Terra molhada","#4A3C31"],
+        ["Areia da praia","#F4E4C1"],
+        ["Concha","#F5E6D3"],
+        ["Musgo verde","#6B8E23"],
+        ["Pedra vulcânica","#2B2B2B"]
+    ]
+},
+
+/* ==================== FLORAIS ==================== */
+"Florais":{
+    description:"Cores inspiradas em flores e jardins, com delicadeza e variedade.",
+    meaning:"Romantismo, delicadeza, renovação e beleza natural.",
+    use:"Perfumaria, moda, decoração, casamentos, papelaria e ilustração.",
+    combinations:["Verde","Rosa","Lavanda","Creme","Dourado"],
+    colors:[
+        ["Lavanda flor","#B57EDC"],
+        ["Lilás flor","#C8A2C8"],
+        ["Rosa rosa","#FF66CC"],
+        ["Peônia","#E68CA9"],
+        ["Tulipa","#FF4D6D"],
+        ["Girassol","#FFD700"],
+        ["Margarida","#FFFACD"],
+        ["Orquídea roxa","#B300B3"],
+        ["Jasmim","#F8F8FF"],
+        ["Flor de cerejeira","#FFB7C5"],
+        ["Íris","#5A4FCF"],
+        ["Cravo","#DC143C"],
+        ["Hibisco","#B63131"],
+        ["Lótus","#F5B7C5"]
+    ]
+},
+
+/* ==================== OCEANO ==================== */
+"Oceano":{
+    description:"Tons profundos e serenos inspirados no mar, em diferentes profundidades.",
+    meaning:"Tranquilidade, mistério, profundidade e imensidão.",
+    use:"Marcas náuticas, turismo, wellness, tecnologia e design aquático.",
+    combinations:["Areia","Branco","Coral","Turquesa","Cinza"],
+    colors:[
+        ["Abissal","#020B1A"],
+        ["Oceano profundo","#0A2540"],
+        ["Mar profundo","#123C69"],
+        ["Mar aberto","#1E6091"],
+        ["Oceano","#168AAD"],
+        ["Mar calmo","#34A0A4"],
+        ["Onda","#52B69A"],
+        ["Água rasa","#76C893"],
+        ["Espuma","#B5E48C"],
+        ["Areia molhada","#D9ED92"],
+        ["Coral marinho","#FF7F50"],
+        ["Concha do mar","#FFF1E6"],
+        ["Azul abissal","#001F3F"],
+        ["Verde marinho","#2E8B57"]
+    ]
+},
+
+/* ==================== CÉU E ATMOSFERA ==================== */
+"Céu e Atmosfera":{
+    description:"Cores inspiradas no céu em diferentes horários e condições climáticas.",
+    meaning:"Liberdade, imensidão, serenidade e introspecção.",
+    use:"Viagens, aviação, bem-estar, meditação e marcas inspiradoras.",
+    combinations:["Branco","Dourado","Rosa","Cinza","Azul"],
+    colors:[
+        ["Noite estrelada","#0B132B"],
+        ["Crepúsculo","#1C2541"],
+        ["Amanhecer","#3A506B"],
+        ["Alvorada","#5BC0BE"],
+        ["Céu do meio-dia","#6FFFE9"],
+        ["Céu claro","#B8E1FF"],
+        ["Céu de verão","#87CEEB"],
+        ["Céu nublado","#A9B7C0"],
+        ["Céu de tempestade","#4A4E69"],
+        ["Pôr do sol","#FF6B6B"],
+        ["Céu rosado","#FFB6C1"],
+        ["Aurora","#B39CD0"],
+        ["Neblina","#D6E4E5"],
+        ["Céu outonal","#8DA399"]
+    ]
+},
+
+/* ==================== GALÁXIA E COSMOS ==================== */
+"Galáxia e Cosmos":{
+    description:"Cores inspiradas no espaço profundo, nebulosas, estrelas e planetas.",
+    meaning:"Mistério, imensidão, transcendência e exploração.",
+    use:"Tecnologia, ficção científica, games, música eletrônica e branding futurista.",
+    combinations:["Preto","Roxo","Azul","Rosa","Dourado"],
+    colors:[
+        ["Espaço profundo","#0A0A1A"],
+        ["Vazio cósmico","#12102A"],
+        ["Nebulosa escura","#2A1B5E"],
+        ["Nebulosa roxa","#4B2E83"],
+        ["Nebulosa magenta","#8A2BE2"],
+        ["Nebulosa rosa","#D16BA5"],
+        ["Via Láctea","#1B1B3A"],
+        ["Poeira estelar","#C7B8EA"],
+        ["Estrela azul","#8FD6FF"],
+        ["Estrela dourada","#FFE9A8"],
+        ["Estrela branca","#F8F8FF"],
+        ["Plutão","#C9B7A6"],
+        ["Marte","#C1440E"],
+        ["Júpiter","#D8A47F"],
+        ["Saturno","#E4CDA1"],
+        ["Vênus","#EED9A8"],
+        ["Netuno","#3E54A3"],
+        ["Urano","#9AD7D8"],
+        ["Mercúrio","#A8A8A8"],
+        ["Supernova","#FF4F8B"],
+        ["Quasar","#00E5FF"],
+        ["Buraco negro","#000010"],
+        ["Aurora boreal","#00FFB3"],
+        ["Cosmos violeta","#5B2C83"],
+        ["Nebulosa azul","#1E3A8A"]
+    ]
+},
+
+/* ==================== URBANO ==================== */
+"Urbano":{
+    description:"Cores inspiradas em concreto, asfalto, vidro e metais das cidades.",
+    meaning:"Modernidade, neutralidade, sofisticação e vida contemporânea.",
+    use:"Arquitetura, moda urbana, tecnologia, branding minimalista e design industrial.",
+    combinations:["Preto","Branco","Vermelho","Amarelo","Azul"],
+    colors:[
+        ["Asfalto","#2E2E2E"],
+        ["Concreto","#8E8E8E"],
+        ["Concreto claro","#BFBFBF"],
+        ["Cimento","#A9A9A9"],
+        ["Vidro","#B0C4DE"],
+        ["Vidro fumê","#3C3C3C"],
+        ["Tijolo urbano","#9B4F3F"],
+        ["Grafite urbano","#3B3B3B"],
+        ["Chumbo urbano","#565656"],
+        ["Aço escovado","#8A9A9A"],
+        ["Ferrugem","#B7410E"],
+        ["Pichação","#5D3FD3"]
+    ]
+},
+
+/* ==================== VINTAGE ==================== */
+"Vintage":{
+    description:"Cores com aparência desbotada e nostálgica, inspiradas em décadas passadas.",
+    meaning:"Nostalgia, tradição, autenticidade e charme retrô.",
+    use:"Marcas artesanais, cafeterias, moda retrô, embalagens e decoração.",
+    combinations:["Bege","Marrom","Vermelho queimado","Verde oliva","Dourado"],
+    colors:[
+        ["Vermelho vintage","#A63A3A"],
+        ["Laranja vintage","#D97A3D"],
+        ["Amarelo vintage","#D9B44A"],
+        ["Verde vintage","#6B8E5A"],
+        ["Azul vintage","#4A6FA5"],
+        ["Roxo vintage","#7B5EA7"],
+        ["Rosa vintage","#C98B8B"],
+        ["Marrom vintage","#7A5C3E"],
+        ["Bege vintage","#E0CFA9"],
+        ["Creme vintage","#F0E6D2"],
+        ["Sépia","#704214"],
+        ["Papel envelhecido","#E8D8B0"]
+    ]
+},
+
+/* ==================== TROPICAL ==================== */
+"Tropical":{
+    description:"Cores vibrantes e quentes inspiradas em praias, frutas e florestas tropicais.",
+    meaning:"Energia, alegria, vitalidade e verão.",
+    use:"Turismo, bebidas, moda praia, festivais e marcas jovens.",
+    combinations:["Amarelo","Verde","Azul","Coral","Branco"],
+    colors:[
+        ["Manga","#FFB347"],
+        ["Maracujá","#F7C948"],
+        ["Abacaxi","#FFE135"],
+        ["Melancia","#FC4A5E"],
+        ["Pitaya","#E91E63"],
+        ["Coco","#F5E6C8"],
+        ["Folha de palmeira","#2E8B57"],
+        ["Banana","#FFE135"],
+        ["Papaya","#FF8C42"],
+        ["Coral tropical","#FF6F61"],
+        ["Turquesa tropical","#00CED1"],
+        ["Lima tropical","#BFFF00"]
+    ]
+},
+
+/* ==================== DOCES E SOBREMESAS ==================== */
+"Doces e Sobremesas":{
+    description:"Cores inspiradas em doces, sobremesas e confeitaria.",
+    meaning:"Prazer, indulgência, alegria e afeto.",
+    use:"Confeitaria, sorveterias, embalagens, festas infantis e marcas afetivas.",
+    combinations:["Rosa","Creme","Marrom","Vermelho","Dourado"],
+    colors:[
+        ["Chiclete","#FF7EB9"],
+        ["Algodão-doce","#FFB3D9"],
+        ["Morango","#FF4D6D"],
+        ["Chocolate ao leite","#7B3F00"],
+        ["Chocolate branco","#F5E6C8"],
+        ["Caramelo doce","#D97A3D"],
+        ["Baunilha","#F3E5AB"],
+        ["Menta doce","#A8E6CF"],
+        ["Blueberry","#4F5D95"],
+        ["Framboesa doce","#D6336C"],
+        ["Limão doce","#F7E967"],
+        ["Coco doce","#FFF1DC"]
+    ]
+},
+
+/* ==================== JOIAS E PEDRAS ==================== */
+"Joias e Pedras":{
+    description:"Cores inspiradas em gemas, pedras preciosas e minerais.",
+    meaning:"Raridade, sofisticação, poder e beleza natural.",
+    use:"Joalheria, moda de luxo, branding premium e decoração sofisticada.",
+    combinations:["Dourado","Prata","Preto","Branco","Vinho"],
+    colors:[
+        ["Rubi","#9B111E"],
+        ["Safira","#0F52BA"],
+        ["Esmeralda","#50C878"],
+        ["Diamante","#E8F4F8"],
+        ["Ametista","#9966CC"],
+        ["Topázio","#FFC87C"],
+        ["Água-marinha","#7FFFD4"],
+        ["Opala","#A8C3BC"],
+        ["Turmalina","#86A17D"],
+        ["Quartzo rosa","#F7CAC9"],
+        ["Ônix","#353839"],
+        ["Jade","#00A86B"]
+    ]
+},
+
+/* ==================== RETRÔ E POP ==================== */
+"Retrô e Pop":{
+    description:"Cores inspiradas em videogames antigos, cultura pop e estética synthwave.",
+    meaning:"Nostalgia digital, diversão, cultura jovem e energia.",
+    use:"Games, música eletrônica, eventos, moda jovem e design retrô.",
+    combinations:["Preto","Roxo","Ciano","Magenta","Amarelo"],
+    colors:[
+        ["Roxo synthwave","#6A0DAD"],
+        ["Rosa synthwave","#FF6EC7"],
+        ["Ciano synthwave","#00E5FF"],
+        ["Azul synthwave","#3D2C8D"],
+        ["Amarelo arcade","#FFD700"],
+        ["Verde arcade","#00FF7F"],
+        ["Vermelho arcade","#FF3131"],
+        ["Laranja arcade","#FF8C00"],
+        ["Roxo pop","#B026FF"],
+        ["Verde pop","#39FF14"],
+        ["Azul pop","#00BFFF"],
+        ["Amarelo pop","#FFF01F"]
+    ]
+},
+
+/* ==================== INDUSTRIAL ==================== */
+"Industrial":{
+    description:"Cores frias e funcionais, inspiradas em fábricas, oficinas e maquinário.",
+    meaning:"Funcionalidade, resistência, precisão e força.",
+    use:"Indústria, ferramentas, logística, tecnologia pesada e branding corporativo.",
+    combinations:["Preto","Amarelo","Laranja","Cinza","Azul"],
+    colors:[
+        ["Amarelo segurança","#FFD100"],
+        ["Laranja sinalização","#FF6A00"],
+        ["Vermelho alarme","#D7263D"],
+        ["Verde máquina","#2E8B57"],
+        ["Azul operário","#1F4E79"],
+        ["Cinza máquina","#7D7D7D"],
+        ["Grafite industrial","#3E3E3E"],
+        ["Aço","#A6A6A6"],
+        ["Preto fábrica","#1A1A1A"],
+        ["Ferro","#4E4E4E"],
+        ["Cobre industrial","#B87333"],
+        ["Zinco","#BCC6CC"]
+    ]
+},
+
+/* ==================== SENSORIAL E EMOCIONAL ==================== */
+"Sensorial e Emocional":{
+    description:"Cores criadas para evocar sensações, memórias e estados emocionais.",
+    meaning:"Emoção, memória, introspecção e sensibilidade.",
+    use:"Arte, terapia, branding emocional, decoração e projetos autorais.",
+    combinations:["Tons suaves","Tons profundos","Tons neutros"],
+    colors:[
+        ["Nostalgia","#C9A88C"],
+        ["Melancolia","#5C6B73"],
+        ["Serenidade","#AFCBFF"],
+        ["Alegria","#FFD166"],
+        ["Ansiedade","#8B5FBF"],
+        ["Calma","#A8DADC"],
+        ["Paixão","#D7263D"],
+        ["Ternura","#F7CAC9"],
+        ["Solidão","#6D8299"],
+        ["Esperança","#B5E48C"],
+        ["Saudade","#9C7A97"],
+        ["Coragem","#E76F51"]
+    ]
+},
+
+/* ==================== ESTAÇÕES DO ANO ==================== */
+"Estações do Ano":{
+    description:"Cores que traduzem primavera, verão, outono e inverno.",
+    meaning:"Ciclos, renovação, calor, recolhimento e transformação.",
+    use:"Moda, decoração, campanhas sazonais, editorial e branding.",
+    combinations:["Tons quentes","Tons frios","Tons neutros"],
+    colors:[
+        ["Primavera rosa","#FFB7C5"],
+        ["Primavera verde","#B5E48C"],
+        ["Primavera amarela","#FFE066"],
+        ["Verão azul","#00B4D8"],
+        ["Verão coral","#FF6F61"],
+        ["Verão amarelo","#FFD60A"],
+        ["Outono laranja","#D97A3D"],
+        ["Outono vermelho","#A63A3A"],
+        ["Outono marrom","#7A5C3E"],
+        ["Inverno azul","#3A506B"],
+        ["Inverno cinza","#A9B7C0"],
+        ["Inverno branco","#F8F8FF"]
+    ]
+},
+
+/* ==================== PSICODÉLICO ==================== */
+"Psicodélico":{
+    description:"Cores intensas e inusitadas, combinadas de forma vibrante e não natural.",
+    meaning:"Expansão, criatividade, contracultura e experimentação.",
+    use:"Arte digital, festivais, música alternativa, moda ousada e design experimental.",
+    combinations:["Preto","Branco","Neon","Roxo","Verde"],
+    colors:[
+        ["Psicodélico rosa","#FF00AA"],
+        ["Psicodélico roxo","#8A00FF"],
+        ["Psicodélico azul","#00C2FF"],
+        ["Psicodélico verde","#39FF14"],
+        ["Psicodélico amarelo","#FFE600"],
+        ["Psicodélico laranja","#FF7A00"],
+        ["Psicodélico vermelho","#FF0040"],
+        ["Psicodélico turquesa","#00FFD5"],
+        ["Psicodélico magenta","#FF00FF"],
+        ["Psicodélico lima","#C6FF00"]
+    ]
+},
+
+/* ==================== MINIMALISTA ==================== */
+"Minimalista":{
+    description:"Cores discretas, limpas e funcionais, para composições sóbrias.",
+    meaning:"Clareza, ordem, silêncio visual e elegância.",
+    use:"Interfaces, arquitetura, editorial, branding corporativo e design de produto.",
+    combinations:["Branco","Preto","Cinza","Bege","Azul suave"],
+    colors:[
+        ["Branco absoluto","#FFFFFF"],
+        ["Off-white minimalista","#FAFAFA"],
+        ["Cinza claro minimalista","#EAEAEA"],
+        ["Cinza minimalista","#C8C8C8"],
+        ["Cinza escuro minimalista","#6E6E6E"],
+        ["Preto minimalista","#111111"],
+        ["Bege minimalista","#F0E6D2"],
+        ["Azul minimalista","#AFCBFF"],
+        ["Verde minimalista","#C8E6C9"],
+        ["Rosa minimalista","#FADADD"]
+    ]
+},
+
+/* ==================== TROPICAL ESCURO ==================== */
+"Tropical Escuro":{
+    description:"Cores tropicais em versões profundas e sofisticadas.",
+    meaning:"Maturidade, mistério e elegância exótica.",
+    use:"Marcas premium tropicais, hotelaria, editorial, moda e decoração.",
+    combinations:["Dourado","Preto","Areia","Verde escuro","Azul profundo"],
+    colors:[
+        ["Verde selva","#1F3D2B"],
+        ["Verde palmeira escuro","#2E5D3A"],
+        ["Azul oceano profundo","#0A2540"],
+        ["Turquesa escuro","#0F766E"],
+        ["Coral profundo","#B33A3A"],
+        ["Amarelo tropical escuro","#C9A227"],
+        ["Rosa tropical escuro","#A63A6B"],
+        ["Marrom madeira","#4B2E20"]
+    ]
+},
+
+/* ==================== AQUARELA ==================== */
+"Aquarela":{
+    description:"Cores suaves e translúcidas, inspiradas em pinturas aquareladas.",
+    meaning:"Leveza, sensibilidade, fluidez e delicadeza.",
+    use:"Papelaria, ilustração, marcas delicadas, editorial e convites.",
+    combinations:["Branco","Bege","Cinza claro","Rosa","Azul"],
+    colors:[
+        ["Aquarela rosa","#F7C6D9"],
+        ["Aquarela pêssego","#FBD3B4"],
+        ["Aquarela amarelo","#FDF3B5"],
+        ["Aquarela verde","#CDE8C9"],
+        ["Aquarela azul","#C7DFF7"],
+        ["Aquarela lilás","#DCCFF0"],
+        ["Aquarela turquesa","#BFE8E4"],
+        ["Aquarela coral","#F8C4B4"],
+        ["Aquarela cinza","#E1E1E1"],
+        ["Aquarela areia","#EFE3CD"]
+    ]
+},
+
+/* ==================== PEDRAS PRECIOSAS ESCURAS ==================== */
+"Pedras Escuras":{
+    description:"Tons profundos inspirados em minerais raros, gemas escuras e pedras vulcânicas.",
+    meaning:"Poder, raridade, mistério e sofisticação.",
+    use:"Joalheria, branding premium, moda autoral e decoração de luxo.",
+    combinations:["Dourado","Prata","Preto","Vinho","Azul profundo"],
+    colors:[
+        ["Ônix profundo","#0B0B0F"],
+        ["Obsidiana","#1C1C1C"],
+        ["Safira negra","#101A33"],
+        ["Rubi negro","#3B0A14"],
+        ["Esmeralda escura","#0F3D2E"],
+        ["Ametista escura","#3B1F5C"],
+        ["Turmalina negra","#1A1A1A"],
+        ["Granada","#5E1224"],
+        ["Jade escuro","#1F4E3D"],
+        ["Lápis-lazúli escuro","#1F2E5A"],
+        ["Quartzo fumê","#3B2F2F"],
+        ["Opala negra","#23232B"]
+    ]
+},
+
+/* ==================== GOURMET ==================== */
+"Gourmet":{
+    description:"Cores inspiradas em ingredientes, especiarias e alta gastronomia.",
+    meaning:"Sabor, prazer, sofisticação e experiência sensorial.",
+    use:"Restaurantes, embalagens gourmet, marcas de alimentos e editorial gastronômico.",
+    combinations:["Dourado","Creme","Marrom","Vinho","Verde oliva"],
+    colors:[
+        ["Açafrão","#F4C430"],
+        ["Páprica","#C1440E"],
+        ["Canela gourmet","#A0522D"],
+        ["Cacau","#5C3317"],
+        ["Baunilha gourmet","#F3E5AB"],
+        ["Pistache","#93C572"],
+        ["Manjericão","#3B7A57"],
+        ["Tomate seco","#B22222"],
+        ["Azeite","#B5A642"],
+        ["Trufa","#3B2F2F"],
+        ["Champagne gourmet","#F7E7CE"],
+        ["Vinho gourmet","#5C0A1E"]
+    ]
+},
+
+/* ==================== TECNOLÓGICO ==================== */
+"Tecnológico":{
+    description:"Cores associadas a inovação, futurismo, dados e inteligência artificial.",
+    meaning:"Inovação, velocidade, precisão e futuro.",
+    use:"Startups, software, IA, cibersegurança, hardware e branding tech.",
+    combinations:["Preto","Azul","Ciano","Roxo","Verde neon"],
+    colors:[
+        ["Azul tech","#0057FF"],
+        ["Ciano tech","#00E5FF"],
+        ["Verde tech","#00FF9C"],
+        ["Roxo tech","#7B2EFF"],
+        ["Rosa tech","#FF2E9A"],
+        ["Laranja tech","#FF6A00"],
+        ["Amarelo tech","#FFD60A"],
+        ["Cinza tech","#2A2A2A"],
+        ["Preto tech","#0A0A0A"],
+        ["Branco tech","#F5F5F5"],
+        ["Azul dados","#1E3A8A"],
+        ["Roxo IA","#5B2C83"]
+    ]
+},
+
+/* ==================== BOTÂNICO ==================== */
+"Botânico":{
+    description:"Cores inspiradas em jardins botânicos, estufas e vegetação ornamental.",
+    meaning:"Vida, cultivo, delicadeza e contemplação.",
+    use:"Marcas de plantas, jardinagem, cosméticos naturais, editorial e decoração.",
+    combinations:["Verde","Creme","Terracota","Rosa","Bege"],
+    colors:[
+        ["Verde estufa","#2F6B4F"],
+        ["Verde folhagem","#3E8E5A"],
+        ["Verde samambaia clara","#7FB77E"],
+        ["Verde musgo claro","#A3B18A"],
+        ["Verde botânico","#4F7942"],
+        ["Rosa botânico","#E8A0BF"],
+        ["Lilás botânico","#C7B8EA"],
+        ["Amarelo botânico","#F2E8A9"],
+        ["Terracota botânico","#C97B5A"],
+        ["Creme botânico","#F5EFE0"]
+    ]
+},
+
+/* ==================== MARINHO PROFUNDO ==================== */
+"Marinho Profundo":{
+    description:"Azuis escuros e densos, inspirados em águas profundas e navegação.",
+    meaning:"Autoridade, profundidade, tradição e confiança.",
+    use:"Marcas náuticas, moda clássica, bancos, editorial e decoração sofisticada.",
+    combinations:["Branco","Dourado","Vermelho","Areia","Cinza"],
+    colors:[
+        ["Marinho clássico","#0B1F3A"],
+        ["Marinho profundo","#0A2540"],
+        ["Azul naval","#1B3B6F"],
+        ["Azul oceânico","#123C69"],
+        ["Azul abissal","#001F3F"],
+        ["Azul petróleo escuro","#0E2A33"],
+        ["Azul aço escuro","#1F3A5F"],
+        ["Azul noite","#0B132B"]
+    ]
+},
+
+/* ==================== ALTA COSTURA ==================== */
+"Alta Costura":{
+    description:"Cores usadas em coleções de luxo, passarelas e editoriais de moda.",
+    meaning:"Elegância, ousadia, sofisticação e expressão autoral.",
+    use:"Moda de luxo, editorial, branding premium, beleza e eventos.",
+    combinations:["Preto","Dourado","Vinho","Rosa","Azul marinho"],
+    colors:[
+        ["Preto alta costura","#0A0A0A"],
+        ["Marfim alta costura","#F8F4EC"],
+        ["Dourado alta costura","#D4AF37"],
+        ["Vinho alta costura","#5C0A1E"],
+        ["Rosa alta costura","#E8A0BF"],
+        ["Azul alta costura","#1F3A5F"],
+        ["Verde alta costura","#1F4E3D"],
+        ["Vermelho alta costura","#B22222"],
+        ["Roxo alta costura","#4B0082"],
+        ["Cinza alta costura","#7D7D7D"]
+    ]
+},
+
+/* ==================== MÍSTICO E ESOTÉRICO ==================== */
+"Místico e Esotérico":{
+    description:"Cores associadas a espiritualidade, rituais, tarot e simbolismo oculto.",
+    meaning:"Mistério, transcendência, intuição e espiritualidade.",
+    use:"Marcas esotéricas, arte, joalheria, editorial alternativo e decoração simbólica.",
+    combinations:["Dourado","Roxo","Preto","Vinho","Azul profundo"],
+    colors:[
+        ["Roxo ritual","#4B0082"],
+        ["Azul místico","#2E1A47"],
+        ["Vinho esotérico","#5C0A1E"],
+        ["Dourado alquímico","#C9A227"],
+        ["Verde esmeralda mágico","#0F3D2E"],
+        ["Prata lunar","#C0C0C0"],
+        ["Preto oculto","#0A0A0A"],
+        ["Lilás espiritual","#C7B8EA"],
+        ["Rosa tarot","#C98B8B"],
+        ["Azul celeste espiritual","#AFCBFF"]
+    ]
+},
+
+/* ==================== OUTONO PROFUNDO ==================== */
+"Outono Profundo":{
+    description:"Cores quentes e terrosas inspiradas no outono em sua fase mais intensa.",
+    meaning:"Transformação, maturidade, aconchego e introspecção.",
+    use:"Moda, editorial, decoração, campanhas sazonais e branding artesanal.",
+    combinations:["Dourado","Marrom","Vinho","Verde oliva","Creme"],
+    colors:[
+        ["Vermelho outono","#A63A3A"],
+        ["Laranja outono","#D97A3D"],
+        ["Amarelo outono","#D9B44A"],
+        ["Marrom outono","#7A5C3E"],
+        ["Verde outono","#6B8E5A"],
+        ["Vinho outono","#5C0A1E"],
+        ["Creme outono","#F0E6D2"],
+        ["Mostarda outono","#B8860B"],
+        ["Terracota outono","#C65D3B"],
+        ["Sépia outono","#704214"]
+    ]
+},
+
+/* ==================== PRIMAVERA SUAVE ==================== */
+"Primavera Suave":{
+    description:"Cores delicadas e frescas inspiradas na primavera.",
+    meaning:"Renovação, leveza, frescor e delicadeza.",
+    use:"Moda, decoração, papelaria, cosméticos e campanhas sazonais.",
+    combinations:["Branco","Bege","Rosa","Verde","Amarelo"],
+    colors:[
+        ["Rosa primavera","#FFB7C5"],
+        ["Pêssego primavera","#FBD3B4"],
+        ["Amarelo primavera","#FDF3B5"],
+        ["Verde primavera","#CDE8C9"],
+        ["Azul primavera","#C7DFF7"],
+        ["Lilás primavera","#DCCFF0"],
+        ["Turquesa primavera","#BFE8E4"],
+        ["Coral primavera","#F8C4B4"],
+        ["Creme primavera","#F5EFE0"],
+        ["Verde água primavera","#D4F1E8"]
+    ]
+},
+
+/* ==================== INVERNO SUAVE ==================== */
+"Inverno Suave":{
+    description:"Cores frias e serenas inspiradas no inverno.",
+    meaning:"Recolhimento, serenidade, introspecção e elegância.",
+    use:"Moda, decoração, editorial, cosméticos e campanhas sazonais.",
+    combinations:["Branco","Cinza","Azul","Bege","Prata"],
+    colors:[
+        ["Cinza inverno","#A9B7C0"],
+        ["Azul inverno","#3A506B"],
+        ["Azul gelo inverno","#D6E4E5"],
+        ["Branco inverno","#F8F8FF"],
+        ["Bege inverno","#E8D5C4"],
+        ["Prata inverno","#C0C0C0"],
+        ["Roxo inverno","#5B2C83"],
+        ["Verde inverno","#4F7942"],
+        ["Vinho inverno","#5C0A1E"],
+        ["Marrom inverno","#5C4033"]
+    ]
+},
+
+/* ==================== FLUORESCENTE ==================== */
+"Fluorescente":{
+    description:"Cores extremamente vibrantes que brilham sob luz negra.",
+    meaning:"Energia máxima, destaque, ousadia e juventude.",
+    use:"Festas, sinalização, moda esportiva, eventos e design de impacto.",
+    combinations:["Preto","Branco","Neon","Roxo","Ciano"],
+    colors:[
+        ["Verde fluorescente","#39FF14"],
+        ["Amarelo fluorescente","#FFFF00"],
+        ["Laranja fluorescente","#FF6700"],
+        ["Rosa fluorescente","#FF10F0"],
+        ["Magenta fluorescente","#FF00FF"],
+        ["Roxo fluorescente","#BC13FE"],
+        ["Azul fluorescente","#1F51FF"],
+        ["Ciano fluorescente","#00FFFF"],
+        ["Turquesa fluorescente","#00FFD5"],
+        ["Vermelho fluorescente","#FF073A"]
+    ]
+},
+
+/* ==================== CORPO E PELE ==================== */
+"Corpo e Pele":{
+    description:"Cores inspiradas em tons de pele, maquiagem e cosméticos.",
+    meaning:"Humanidade, naturalidade, cuidado e afeto.",
+    use:"Cosméticos, moda, editorial, branding inclusivo e ilustração.",
+    combinations:["Marrom","Rosa","Creme","Dourado","Vinho"],
+    colors:[
+        ["Pele clara","#F5D6C6"],
+        ["Pele média","#E0AC8B"],
+        ["Pele morena","#C68642"],
+        ["Pele negra","#8D5524"],
+        ["Pele retinta","#5C3A21"],
+        ["Pele rosada","#F1C6B8"],
+        ["Pele dourada","#D9A066"],
+        ["Blush","#E8A0BF"],
+        ["Nude","#D8B4A0"],
+        ["Cacau pele","#7B3F00"]
+    ]
+},
+
+/* ==================== ENERGIA E MOVIMENTO ==================== */
+"Energia e Movimento":{
+    description:"Cores vibrantes que sugerem velocidade, ação e vitalidade.",
+    meaning:"Vitalidade, impulso, esportividade e dinamismo.",
+    use:"Esportes, energia, eventos, branding jovem e design de impacto.",
+    combinations:["Preto","Branco","Neon","Vermelho","Amarelo"],
+    colors:[
+        ["Vermelho energia","#FF2400"],
+        ["Laranja energia","#FF6A00"],
+        ["Amarelo energia","#FFD60A"],
+        ["Verde energia","#00FF7F"],
+        ["Ciano energia","#00E5FF"],
+        ["Azul energia","#0057FF"],
+        ["Roxo energia","#7B2EFF"],
+        ["Rosa energia","#FF2E9A"],
+        ["Magenta energia","#FF00FF"],
+        ["Lima energia","#BFFF00"]
+    ]
+}
+
+};
+
+/* ==========================================================
+   ELEMENTOS
+========================================================== */
+
+const familiesEl = document.getElementById("families");
+const categoriesEl = document.getElementById("categories");
+const detailEl = document.getElementById("detail");
+const resultsEl = document.getElementById("results");
+const searchEl = document.getElementById("search");
+
+const allColors = [];
+
+Object.entries(palettes).forEach(([family,data]) => {
+    data.colors.forEach(color => {
+        allColors.push({
+            name:color[0],
+            hex:color[1],
+            family:family
+        });
+    });
+});
+
+/* ==========================================================
+   CATEGORIAS
+========================================================== */
+
+categoriesEl.innerHTML =
+    `<button class="category active" onclick="showAll()">Todas</button>` +
+    Object.keys(palettes)
+    .map(name =>
+        `<button class="category" onclick="filterFamily('${name}')">${name}</button>`
+    )
+    .join("");
+
+/* ==========================================================
+   DESENHAR FAMÍLIAS
+========================================================== */
+
+function renderFamilies(){
+    familiesEl.innerHTML = "";
+
+    Object.entries(palettes).forEach(([family,data]) => {
+        const card = document.createElement("article");
+        card.className = "family-card";
+        card.onclick = () => openFamily(family);
+
+        card.innerHTML = `
+            <div class="family-top">
+                <div class="family-name">${family}</div>
+                <div class="family-count">${data.colors.length} tons</div>
+            </div>
+
+            <div class="swatches">
+                ${data.colors.slice(0,7).map(c => `
+                    <div class="swatch" style="background:${c[1]}" title="${c[0]}"></div>
+                `).join("")}
+            </div>
+
+            <p class="family-description">${data.description}</p>
+        `;
+
+        familiesEl.appendChild(card);
+    });
+}
+
+renderFamilies();
+
+/* ==========================================================
+   ABRIR FAMÍLIA
+========================================================== */
+
+function openFamily(family){
+    const data = palettes[family];
+    const first = data.colors[Math.floor(data.colors.length/2)];
+    openColor(first[0], first[1], family, data);
+}
+
+/* ==========================================================
+   ABRIR COR
+========================================================== */
+
+function openColor(name,hex,family,data){
+
+    const rgb = hexToRgb(hex);
+    const hsl = hexToHsl(hex);
+    const opposite = getComplementary(hex);
+
+    detailEl.classList.add("show");
+
+    detailEl.innerHTML = `
+        <div class="detail-card">
+            <button class="close" onclick="closeDetail()">×</button>
+
+            <div class="detail-main">
+                <div class="big-color" style="background:${hex}">
+                    <div class="color-paper">
+                        <strong>${name}</strong>
+                        <span>${hex}</span>
+                    </div>
+                </div>
+
+                <div class="detail-info">
+                    <div class="family-label">${family}</div>
+                    <h2>${name}</h2>
+                    <p class="description">${data.description}</p>
+
+                    <div class="codes">
+                        <div class="code">HEX ${hex}</div>
+                        <div class="code">RGB ${rgb}</div>
+                        <div class="code">HSL ${hsl}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-box">
+                    <h3>Significado</h3>
+                    <p>${data.meaning}</p>
+                </div>
+
+                <div class="info-box">
+                    <h3>Onde usar</h3>
+                    <p>${data.use}</p>
+                </div>
+
+                <div class="info-box">
+                    <h3>Combina com</h3>
+                    <p>${data.combinations.join(", ")}</p>
+                </div>
+            </div>
+
+            <h3 class="tones-title">Tons de ${family.toLowerCase()}</h3>
+
+            <div class="tone-grid">
+                ${data.colors.map(c => `
+                    <div class="tone"
+                         onclick="openColor(
+                            '${c[0]}',
+                            '${c[1]}',
+                            '${family}',
+                            palettes['${family}']
+                         )">
+                        <div class="tone-color" style="background:${c[1]}"></div>
+                        <div class="tone-info">
+                            <strong>${c[0]}</strong>
+                            <small>${c[1]}</small>
+                        </div>
+                    </div>
+                `).join("")}
+            </div>
+
+            <h3 class="tones-title">Cor oposta / complementar</h3>
+
+            <div class="tone" style="max-width:220px;margin-top:15px"
+                 onclick="showComplementary('${opposite}')">
+                <div class="tone-color" style="background:${opposite}"></div>
+                <div class="tone-info">
+                    <strong>Complementar</strong>
+                    <small>${opposite}</small>
+                </div>
+            </div>
+
+            <h3 class="tones-title">Paleta sugerida</h3>
+            <div class="palette">
+                ${createPalette(hex,data.colors)}
+            </div>
+        </div>
+    `;
+
+    detailEl.scrollIntoView({ behavior:"smooth", block:"start" });
+}
+
+/* ==========================================================
+   PALETA
+========================================================== */
+
+function createPalette(main,colors){
+    const picks = [
+        main,
+        colors[0][1],
+        colors[Math.floor(colors.length/3)][1],
+        colors[Math.floor(colors.length/1.5)][1],
+        colors[colors.length-1][1]
+    ];
+
+    return picks.map(color => `
+        <div style="background:${color}" title="${color}"
+             onclick="copyColor('${color}')"></div>
+    `).join("");
+}
+
+/* ==========================================================
+   COMPLEMENTAR
+========================================================== */
+
+function getComplementary(hex){
+    const rgb = hexToRgbValues(hex);
+    return "#" + rgb.map(v =>
+        (255-v).toString(16).padStart(2,"0")
+    ).join("").toUpperCase();
+}
+
+function showComplementary(hex){
+    const found = allColors.find(c =>
+        c.hex.toUpperCase() === hex.toUpperCase()
+    );
+
+    if(found){
+        openColor(found.name, found.hex, found.family, palettes[found.family]);
+    } else {
+        copyColor(hex);
+    }
+}
+
+/* ==========================================================
+   CONVERSÕES
+========================================================== */
+
+function hexToRgbValues(hex){
+    hex = hex.replace("#","");
+    return [
+        parseInt(hex.substring(0,2),16),
+        parseInt(hex.substring(2,4),16),
+        parseInt(hex.substring(4,6),16)
+    ];
+}
+
+function hexToRgb(hex){
+    return hexToRgbValues(hex).join(", ");
+}
+
+function hexToHsl(hex){
+    let [r,g,b] = hexToRgbValues(hex).map(v => v/255);
+
+    const max = Math.max(r,g,b);
+    const min = Math.min(r,g,b);
+    let h = 0, s = 0;
+    const l = (max+min)/2;
+
+    if(max !== min){
+        const d = max-min;
+        s = l > .5 ? d/(2-max-min) : d/(max+min);
+
+        switch(max){
+            case r: h = (g-b)/d + (g<b ? 6 : 0); break;
+            case g: h = (b-r)/d + 2; break;
+            case b: h = (r-g)/d + 4; break;
+        }
+        h /= 6;
+    }
+
+    return `${Math.round(h*360)}°, ${Math.round(s*100)}%, ${Math.round(l*100)}%`;
+}
+
+/* ==========================================================
+   PESQUISA
+========================================================== */
+
+searchEl.addEventListener("input",searchColors);
+
+function searchColors(){
+    const query = searchEl.value.toLowerCase().trim();
+
+    if(!query){
+        resultsEl.classList.remove("show");
+        familiesEl.style.display = "grid";
+        return;
+    }
+
+    familiesEl.style.display = "none";
+    resultsEl.classList.add("show");
+
+    const results = allColors.filter(color =>
+        color.name.toLowerCase().includes(query) ||
+        color.hex.toLowerCase().includes(query) ||
+        color.family.toLowerCase().includes(query)
+    );
+
+    if(!results.length){
+        resultsEl.innerHTML = `
+            <div style="grid-column:1/-1;text-align:center;padding:50px;color:#756f67">
+                Nenhuma cor encontrada.
+            </div>
+        `;
+        return;
+    }
+
+    resultsEl.innerHTML = results.map(color => `
+        <div class="result"
+             onclick="openColor(
+                '${color.name}',
+                '${color.hex}',
+                '${color.family}',
+                palettes['${color.family}']
+             )">
+            <div class="result-color" style="background:${color.hex}"></div>
+            <div class="result-info">
+                <strong>${color.name}</strong>
+                <small>${color.hex} · ${color.family}</small>
+            </div>
+        </div>
+    `).join("");
+}
+
+/* ==========================================================
+   FILTRO POR FAMÍLIA
+========================================================== */
+
+function filterFamily(family){
+    searchEl.value = "";
+    familiesEl.style.display = "grid";
+    resultsEl.classList.remove("show");
+
+    document.querySelectorAll(".category")
+        .forEach(btn => btn.classList.remove("active"));
+
+    const button = [...document.querySelectorAll(".category")]
+        .find(btn => btn.textContent === family);
+
+    if(button) button.classList.add("active");
+
+    familiesEl.innerHTML = "";
+    const data = palettes[family];
+
+    const card = document.createElement("article");
+    card.className = "family-card";
+
+    card.innerHTML = `
+        <div class="family-top">
+            <div class="family-name">${family}</div>
+            <div class="family-count">${data.colors.length} tons</div>
+        </div>
+
+        <div class="swatches">
+            ${data.colors.slice(0,7).map(c => `
+                <div class="swatch" style="background:${c[1]}"
+                     onclick="event.stopPropagation();
+                              openColor(
+                                 '${c[0]}',
+                                 '${c[1]}',
+                                 '${family}',
+                                 palettes['${family}']
+                              )"></div>
+            `).join("")}
+        </div>
+
+        <p class="family-description">${data.description}</p>
+
+        <div class="tone-grid" style="margin-top:18px">
+            ${data.colors.map(c => `
+                <div class="tone" onclick="event.stopPropagation();
+                     openColor('${c[0]}','${c[1]}','${family}',palettes['${family}'])">
+                    <div class="tone-color" style="background:${c[1]}"></div>
+                    <div class="tone-info">
+                        <strong>${c[0]}</strong>
+                        <small>${c[1]}</small>
+                    </div>
+                </div>
+            `).join("")}
+        </div>
+    `;
+
+    familiesEl.appendChild(card);
+}
+
+function showAll(){
+    searchEl.value = "";
+    document.querySelectorAll(".category")
+        .forEach(btn => btn.classList.remove("active"));
+
+    document.querySelector(".category").classList.add("active");
+    resultsEl.classList.remove("show");
+    familiesEl.style.display = "grid";
+    renderFamilies();
+}
+
+/* ==========================================================
+   FECHAR / COPIAR
+========================================================== */
+
+function closeDetail(){
+    detailEl.classList.remove("show");
+}
+
+function copyColor(hex){
+    navigator.clipboard.writeText(hex);
+    const aviso = document.createElement("div");
+    aviso.textContent = "Copiado: " + hex;
+    aviso.style.cssText = `
+        position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+        background:#292621;color:#fff;padding:10px 18px;border-radius:30px;
+        font-size:12px;z-index:99;opacity:0;transition:.3s;
+    `;
+    document.body.appendChild(aviso);
+    requestAnimationFrame(() => aviso.style.opacity = "1");
+    setTimeout(() => {
+        aviso.style.opacity = "0";
+        setTimeout(() => aviso.remove(), 300);
+    }, 1200);
+}
+
+</script>
+
+</body>
+</html>
